@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     APP_NAME = 'actividad1-devops-cicd'
-    IMAGE_NAME = 'actividad1-devops-cicd'
+    IMAGE_NAME = 'lugomer9/docker_actividad1_devops_cicd'
     IMAGE_TAG = "${env.BUILD_NUMBER}"
     DOCKER_BUILDKIT = '0'
     COMPOSE_DOCKER_CLI_BUILD = '0'
@@ -42,6 +42,23 @@ pipeline {
       steps {
         sh 'docker version'
         sh 'docker build --pull -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .'
+      }
+    }
+
+    stage('Push Docker Image') {
+      when {
+        expression {
+          env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main'
+        }
+      }
+
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_TOKEN')]) {
+          sh 'echo "${DOCKERHUB_TOKEN}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin'
+          sh 'docker push ${IMAGE_NAME}:${IMAGE_TAG}'
+          sh 'docker push ${IMAGE_NAME}:latest'
+          sh 'docker logout'
+        }
       }
     }
 
