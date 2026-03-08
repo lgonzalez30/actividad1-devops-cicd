@@ -41,6 +41,8 @@ kubectl apply -f k8s/ingress.yaml
 kubectl apply -f k8s/prometheus-configmap.yaml
 kubectl apply -f k8s/prometheus-deployment.yaml
 kubectl apply -f k8s/prometheus-service.yaml
+kubectl apply -f k8s/grafana-datasource-configmap.yaml
+kubectl apply -f k8s/grafana-dashboard-configmap.yaml
 kubectl apply -f k8s/grafana-deployment.yaml
 kubectl apply -f k8s/grafana-service.yaml
 ```
@@ -79,3 +81,8 @@ Credenciales iniciales de Grafana:
 
 - usuario: `admin`
 - password: `admin123`
+
+Grafana queda provisionado automaticamente con:
+
+- datasource Prometheus
+- dashboard base de la app

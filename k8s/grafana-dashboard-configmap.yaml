@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-config
+  namespace: devops-lab
+data:
+  dashboard-provider.yaml: |
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards
+  app-dashboard.json: |
+    {
+      "title": "DevOps Lab App",
+      "description": "Dashboard basico para la app del laboratorio",
+      "schemaVersion": 39,
+      "version": 1,
+      "refresh": "10s",
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "Process CPU Time",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "process_cpu_seconds_total{job=\"devops-lab-app\"}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "Resident Memory",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "process_resident_memory_bytes{job=\"devops-lab-app\"}",
+              "refId": "A"
+            }
+          ]
+        }
+      ]
+    }
