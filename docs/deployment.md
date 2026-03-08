@@ -31,7 +31,7 @@ Se publican dos tags:
 
 Los manifests base estan en la carpeta [k8s](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/k8s).
 
-Orden de despliegue:
+Orden de despliegue manual:
 
 ```bash
 kubectl apply -f k8s/namespace.yaml
@@ -54,6 +54,8 @@ kubectl get all -n devops-lab
 ```
 
 La app expone el puerto `3000` y usa `/health` como `readinessProbe` y `livenessProbe`.
+
+En el estado actual del laboratorio, Jenkins tambien realiza este despliegue automaticamente al final del pipeline de CD.
 
 Si quieres desplegar una version fija, reemplaza el tag `latest` por un tag de build, por ejemplo:
 

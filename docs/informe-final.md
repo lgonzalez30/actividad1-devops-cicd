@@ -39,6 +39,8 @@ El pipeline definido en [jenkins/Jenkinsfile](/Users/luisgonzalez/Documents/deve
 - `npm test`
 - construccion de imagen Docker
 - publicacion de imagen en Docker Hub
+- despliegue automatico en Kubernetes local
+- verificacion del rollout del deployment
 
 El trigger seleccionado para entorno local fue `Poll SCM`, evitando depender de webhooks publicos durante el taller.
 
@@ -91,7 +93,8 @@ Se ejecuto escaneo de dependencias npm. En la validacion realizada no se detecta
 - endurecer el pipeline para fallar ante vulnerabilidades de severidad alta
 - agregar cobertura de pruebas al analisis
 - evitar uso de credenciales simples por defecto en Grafana para un entorno productivo
-- automatizar despliegue a Kubernetes desde Jenkins con credenciales controladas
+- usar tags inmutables de imagen en el deployment
+- mover credenciales y configuraciones sensibles a secrets mas controlados
 
 ## 6. Monitoreo
 
@@ -128,7 +131,6 @@ La integracion de automatizaciones en CI y CD reduce trabajo manual repetitivo, 
 
 ## 9. Mejoras futuras
 
-- despliegue automatico en Kubernetes desde Jenkins
 - uso de tags de imagen inmutables en despliegue
 - alertas basicas en Grafana
 - almacenamiento persistente para Grafana y Prometheus

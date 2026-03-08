@@ -20,10 +20,12 @@ Cuando detecta cambios en `main`, ejecuta:
 - `npm test`
 - `docker build`
 - `docker push` a Docker Hub
+- `kubectl apply` sobre el cluster local
+- `kubectl rollout restart` y `kubectl rollout status`
 
 ## Flujo de despliegue
 
-El despliegue a Kubernetes se realiza mediante manifiestos declarativos aplicados sobre el cluster local.
+El despliegue a Kubernetes se realiza desde Jenkins, aplicando los manifiestos declarativos y validando el rollout del deployment principal.
 
 ## Flujo de monitoreo
 

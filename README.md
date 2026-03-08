@@ -5,9 +5,10 @@ Laboratorio academico basado en una app web minima con Node.js y Express, integr
 - GitHub Actions para CI
 - SonarQube Cloud para analisis estatico
 - Snyk para analisis de vulnerabilidades
-- Jenkins para CD basico
+- Jenkins para CD
 - Docker para empaquetado
-- Kubernetes, Prometheus y Grafana como siguientes etapas del laboratorio
+- Kubernetes para despliegue
+- Prometheus y Grafana para monitoreo
 
 ## Estado actual
 
@@ -19,7 +20,7 @@ Hasta este punto el repositorio ya tiene:
 - CI en GitHub Actions
 - integracion con SonarQube Cloud
 - integracion con Snyk
-- pipeline de Jenkins ejecutando `checkout`, `npm ci`, `npm test` y `docker build`
+- pipeline de Jenkins ejecutando `checkout`, `npm ci`, `npm test`, `docker build`, `docker push` y despliegue en Kubernetes
 - infraestructura local para Jenkins en Docker
 
 ## Estructura principal
@@ -175,7 +176,7 @@ Archivo de configuracion:
 
 - [sonar-project.properties](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/sonar-project.properties)
 
-## Jenkins para CD basico
+## Jenkins para CD
 
 El pipeline de Jenkins esta definido en:
 
@@ -187,7 +188,9 @@ Actualmente realiza:
 - `npm ci`
 - `npm test`
 - `docker build`
-- listado de imagen generada
+- `docker push` a Docker Hub
+- `kubectl apply` sobre Kubernetes local
+- verificacion del rollout
 
 El pipeline esta pensado para ejecutarse sobre la rama `main`.
 
@@ -257,12 +260,11 @@ Trigger recomendado para entorno local:
 H/5 * * * *
 ```
 
-## Siguiente alcance del laboratorio
+## Entregable documental
 
 Para el entregable final, revisar tambien:
 
 - [docs/informe-final.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/informe-final.md)
 - [docs/architecture.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/architecture.md)
 - [docs/workflow.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/workflow.md)
-
 
