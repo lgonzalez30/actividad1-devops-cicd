@@ -1,11 +1,62 @@
 pipeline {
   agent any
 
+  environment {
+    APP_NAME = 'actividad1-devops-cicd'
+    IMAGE_NAME = 'actividad1-devops-cicd'
+    IMAGE_TAG = "${env.BUILD_NUMBER}"
+  }
+
+  options {
+    timestamps()
+  }
+
   stages {
-    stage('Placeholder') {
+    stage('Checkout') {
       steps {
-        echo 'CD se implementara en una tarea posterior'
+        checkout scm
       }
+    }
+
+    stage('Install Dependencies') {
+      steps {
+        sh 'npm ci'
+      }
+    }
+
+    stage('Run Tests') {
+      steps {
+        sh 'npm test'
+      }
+    }
+
+    stage('Build Docker Image') {
+      when {
+        branch 'main'
+      }
+
+      steps {
+        sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .'
+      }
+    }
+
+    stage('Image Summary') {
+      when {
+        branch 'main'
+      }
+
+      steps {
+        sh 'docker images ${IMAGE_NAME} --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}"'
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Pipeline completed successfully for ${APP_NAME}"
+    }
+    failure {
+      echo 'Pipeline failed. Review the Jenkins stage logs.'
     }
   }
 }
