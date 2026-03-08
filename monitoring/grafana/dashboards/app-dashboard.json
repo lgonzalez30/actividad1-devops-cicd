@@ -7,12 +7,60 @@
   "panels": [
     {
       "type": "timeseries",
+      "title": "HTTP Requests Total",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "expr": "sum by (route) (http_requests_total{job=\"devops-lab-app\"})",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "HTTP Request Duration p95",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"devops-lab-app\"}[1m])))",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Resident Memory",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "targets": [
+        {
+          "expr": "process_resident_memory_bytes{job=\"devops-lab-app\"}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
       "title": "Process CPU Time",
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "targets": [
         {
@@ -23,16 +71,16 @@
     },
     {
       "type": "timeseries",
-      "title": "Resident Memory",
+      "title": "Application Up",
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 8
       },
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{job=\"devops-lab-app\"}",
+          "expr": "up{job=\"devops-lab-app\"}",
           "refId": "A"
         }
       ]

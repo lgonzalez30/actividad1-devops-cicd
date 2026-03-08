@@ -30,5 +30,5 @@ test('getMetrics returns Prometheus-compatible content', async () => {
 
   assert.equal(res.statusCode, 200);
   assert.equal(res.headers['Content-Type'], register.contentType);
-  assert.match(res.body, /process_cpu_user_seconds_total|process_cpu_seconds_total|nodejs_eventloop/);
+  assert.match(res.body, /http_requests_total|http_request_duration_seconds|process_cpu_user_seconds_total|process_cpu_seconds_total|nodejs_eventloop/);
 });
