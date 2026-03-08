@@ -259,6 +259,12 @@ H/5 * * * *
 
 ## Siguiente alcance del laboratorio
 
+Para el entregable final, revisar tambien:
+
+- [docs/informe-final.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/informe-final.md)
+- [docs/architecture.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/architecture.md)
+- [docs/workflow.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/workflow.md)
+
 Lo siguiente que falta por implementar es:
 
 - publicacion de imagen en un registry
