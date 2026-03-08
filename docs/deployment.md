@@ -38,6 +38,11 @@ kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/ingress.yaml
+kubectl apply -f k8s/prometheus-configmap.yaml
+kubectl apply -f k8s/prometheus-deployment.yaml
+kubectl apply -f k8s/prometheus-service.yaml
+kubectl apply -f k8s/grafana-deployment.yaml
+kubectl apply -f k8s/grafana-service.yaml
 ```
 
 Validar recursos:
@@ -53,3 +58,24 @@ Si quieres desplegar una version fija, reemplaza el tag `latest` por un tag de b
 ```text
 lugomer9/docker_actividad1_devops_cicd:4
 ```
+
+## Monitoreo local
+
+Prometheus scrapea el endpoint `/metrics` de la app a traves del service interno de Kubernetes.
+
+Acceso por port-forward:
+
+```bash
+kubectl port-forward -n devops-lab service/prometheus-service 9090:9090
+kubectl port-forward -n devops-lab service/grafana-service 3001:3000
+```
+
+URLs:
+
+- Prometheus: `http://localhost:9090`
+- Grafana: `http://localhost:3001`
+
+Credenciales iniciales de Grafana:
+
+- usuario: `admin`
+- password: `admin123`

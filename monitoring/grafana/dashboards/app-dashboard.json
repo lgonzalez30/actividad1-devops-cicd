@@ -1,5 +1,41 @@
 {
   "title": "DevOps Lab App",
-  "description": "Placeholder dashboard for future Grafana configuration",
-  "panels": []
+  "description": "Dashboard basico para la app del laboratorio",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Process CPU Time",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "expr": "process_cpu_seconds_total{job=\"devops-lab-app\"}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Resident Memory",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "expr": "process_resident_memory_bytes{job=\"devops-lab-app\"}",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
 }
