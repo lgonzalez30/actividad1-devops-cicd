@@ -13,10 +13,12 @@ RUN apt-get update \
     > /etc/apt/sources.list.d/docker.list \
   && apt-get update \
   && apt-get install -y docker-ce-cli \
+  && curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl" \
+  && install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl \
+  && rm kubectl \
   && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
   && apt-get install -y nodejs \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
 USER jenkins
-

@@ -4,6 +4,7 @@ Infraestructura minima para levantar Jenkins en Docker con:
 
 - Jenkins LTS
 - Docker CLI
+- kubectl
 - Node.js 20
 - npm
 - permisos para invocar Docker del host desde el contenedor
@@ -48,6 +49,16 @@ docker exec jenkins-devops-lab cat /var/jenkins_home/secrets/initialAdminPasswor
 - Repository URL: `https://github.com/lgonzalez30/actividad1-devops-cicd.git`
 - Branch: `main`
 - Script Path: `jenkins/Jenkinsfile`
+
+## Acceso a Kubernetes local
+
+El contenedor Jenkins monta el archivo local:
+
+```text
+/Users/luisgonzalez/.kube/config
+```
+
+Esto permite que el pipeline ejecute `kubectl apply` y `kubectl rollout status` sobre el cluster local configurado en esa maquina.
 
 ## Requisitos
 

@@ -73,6 +73,35 @@ pipeline {
         sh 'docker images ${IMAGE_NAME} --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}"'
       }
     }
+
+    stage('Deploy to Kubernetes') {
+      when {
+        expression {
+          env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main'
+        }
+      }
+
+      steps {
+        sh 'kubectl config current-context'
+        sh 'kubectl apply -f k8s/namespace.yaml'
+        sh 'kubectl apply -f k8s/deployment.yaml'
+        sh 'kubectl apply -f k8s/service.yaml'
+        sh 'kubectl apply -f k8s/ingress.yaml'
+      }
+    }
+
+    stage('Verify Rollout') {
+      when {
+        expression {
+          env.BRANCH_NAME == 'main' || env.GIT_BRANCH == 'origin/main' || env.GIT_BRANCH == 'main'
+        }
+      }
+
+      steps {
+        sh 'kubectl rollout restart deployment/devops-lab-app -n devops-lab'
+        sh 'kubectl rollout status deployment/devops-lab-app -n devops-lab --timeout=180s'
+      }
+    }
   }
 
   post {
