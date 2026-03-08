@@ -15,6 +15,24 @@ spec:
     spec:
       containers:
         - name: app
-          image: your-dockerhub-user/devops-lab-app:latest
+          image: lugomer9/docker_actividad1_devops_cicd:latest
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "3000"
+            - name: NODE_ENV
+              value: "production"
           ports:
             - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
