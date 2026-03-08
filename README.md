@@ -265,9 +265,4 @@ Para el entregable final, revisar tambien:
 - [docs/architecture.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/architecture.md)
 - [docs/workflow.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/workflow.md)
 
-Lo siguiente que falta por implementar es:
 
-- publicacion de imagen en un registry
-- despliegue real en Kubernetes
-- integracion de Prometheus con el endpoint `/metrics`
-- dashboard basico en Grafana

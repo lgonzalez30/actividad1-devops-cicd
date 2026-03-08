@@ -112,7 +112,6 @@ Prometheus recolecta estas metricas desde el service interno de Kubernetes y Gra
 
 ## 7. Evidencias requeridas
 
-Agregar en esta seccion capturas o enlaces a:
 
 - GitHub Actions en ejecucion exitosa
 - Jenkins pipeline exitoso
