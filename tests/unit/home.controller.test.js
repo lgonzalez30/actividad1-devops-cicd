@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { getHealth } = require('../../src/controllers/health.controller');
+const { getHome } = require('../../src/controllers/home.controller');
 
 function createResponseDouble() {
   return {
@@ -17,14 +17,15 @@ function createResponseDouble() {
   };
 }
 
-test('getHealth returns service status', () => {
+test('getHome returns basic application metadata', () => {
   const res = createResponseDouble();
 
-  getHealth({}, res);
+  getHome({}, res);
 
   assert.equal(res.statusCode, 200);
   assert.deepEqual(res.body, {
-    status: 'ok',
-    service: 'actividad1-devops-cicd',
+    name: 'actividad1-devops-cicd',
+    message: 'Laboratorio DevOps activo',
+    endpoints: ['/', '/health', '/metrics'],
   });
 });
