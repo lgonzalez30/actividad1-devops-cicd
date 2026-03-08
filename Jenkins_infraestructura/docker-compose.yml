@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: jenkins-devops-lab
+    user: "0:0"
     restart: unless-stopped
     ports:
       - "8080:8080"

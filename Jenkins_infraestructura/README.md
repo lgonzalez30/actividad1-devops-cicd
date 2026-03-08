@@ -6,12 +6,20 @@ Infraestructura minima para levantar Jenkins en Docker con:
 - Docker CLI
 - Node.js 20
 - npm
+- permisos para invocar Docker del host desde el contenedor
 
 ## Levantar Jenkins
 
 Desde esta carpeta:
 
 ```bash
+docker compose up -d --build
+```
+
+Si Jenkins ya estaba levantado, recrealo para aplicar el cambio:
+
+```bash
+docker compose down
 docker compose up -d --build
 ```
 
