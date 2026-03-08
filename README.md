@@ -1,27 +1,37 @@
 # Laboratorio DevOps CI/CD
 
-Laboratorio academico basado en una app web minima con Node.js y Express, integrado con:
+Repositorio academico para demostrar un flujo DevOps completo sobre una aplicacion web minima en Node.js + Express.
 
-- GitHub Actions para CI
-- SonarQube Cloud para analisis estatico
-- Snyk para analisis de vulnerabilidades
-- Jenkins para CD
-- Docker para empaquetado
-- Kubernetes para despliegue
-- Prometheus y Grafana para monitoreo
+## Resumen
 
-## Estado actual
+El proyecto implementa:
 
-Hasta este punto el repositorio ya tiene:
+- CI con GitHub Actions
+- analisis estatico con SonarQube Cloud
+- analisis de vulnerabilidades con Snyk
+- CD con Jenkins
+- empaquetado con Docker
+- despliegue en Kubernetes local
+- monitoreo con Prometheus y Grafana
 
-- app minima con endpoints `/`, `/health` y `/metrics`
+Estado actual:
+
+- app con endpoints `GET /`, `GET /health` y `GET /metrics`
 - tests basicos con `node --test`
-- `Dockerfile` funcional
-- CI en GitHub Actions
-- integracion con SonarQube Cloud
-- integracion con Snyk
-- pipeline de Jenkins ejecutando `checkout`, `npm ci`, `npm test`, `docker build`, `docker push` y despliegue en Kubernetes
-- infraestructura local para Jenkins en Docker
+- imagen publicada en Docker Hub
+- Jenkins construyendo, publicando y desplegando en Kubernetes
+- Prometheus scrapeando metricas
+- Grafana mostrando dashboard base
+
+## Flujo de trabajo
+
+1. Se hace `git push` sobre `main`.
+2. GitHub Actions ejecuta CI, pruebas, SonarQube Cloud y Snyk.
+3. Jenkins detecta cambios mediante `Poll SCM`.
+4. Jenkins construye la imagen Docker y la publica en Docker Hub.
+5. Jenkins aplica manifiestos y valida el rollout en Kubernetes local.
+6. Prometheus recolecta metricas desde `/metrics`.
+7. Grafana visualiza CPU, memoria, requests y latencia.
 
 ## Estructura principal
 
@@ -30,39 +40,32 @@ Hasta este punto el repositorio ya tiene:
 ├── .github/workflows/ci.yml
 ├── Dockerfile
 ├── Jenkins_infraestructura/
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   └── README.md
 ├── jenkins/Jenkinsfile
+├── k8s/
+├── monitoring/
 ├── src/
-│   ├── app.js
-│   ├── server.js
-│   ├── controllers/
-│   ├── metrics/
-│   └── routes/
-├── tests/unit/
-├── sonar-project.properties
-└── package.json
+├── tests/
+├── docs/
+├── package.json
+└── sonar-project.properties
 ```
 
-## Aplicacion web
-
-La app esta implementada con Express y expone:
-
-- `GET /`
-- `GET /health`
-- `GET /metrics`
+## Aplicacion
 
 Archivos principales:
 
 - [src/app.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/src/app.js)
 - [src/server.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/src/server.js)
-- [src/controllers/home.controller.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/src/controllers/home.controller.js)
-- [src/controllers/health.controller.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/src/controllers/health.controller.js)
-- [src/controllers/metrics.controller.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/src/controllers/metrics.controller.js)
 - [src/metrics/register.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/src/metrics/register.js)
+- [src/middleware/http-metrics.middleware.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/src/middleware/http-metrics.middleware.js)
 
-## Ejecucion local
+Endpoints:
+
+- `GET /`
+- `GET /health`
+- `GET /metrics`
+
+## Ejecucion rapida
 
 Instalar dependencias:
 
@@ -70,67 +73,45 @@ Instalar dependencias:
 npm install
 ```
 
-Ejecutar aplicacion:
+Ejecutar localmente:
 
 ```bash
 npm start
 ```
 
-Ejecutar en modo desarrollo:
+Modo desarrollo:
 
 ```bash
 npm run dev
 ```
 
-Por defecto la app queda disponible en:
-
-```text
-http://localhost:3000
-```
-
-Para cambiar el puerto:
-
-```bash
-PORT=3007 npm start
-```
-
-## Tests
-
-Ejecutar pruebas:
+Pruebas:
 
 ```bash
 npm test
 ```
 
-Tests actuales:
+Cambiar puerto:
 
-- [tests/unit/home.controller.test.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/tests/unit/home.controller.test.js)
-- [tests/unit/health.test.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/tests/unit/health.test.js)
-- [tests/unit/metrics.controller.test.js](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/tests/unit/metrics.controller.test.js)
+```bash
+PORT=3007 npm start
+```
 
 ## Validacion manual
 
-Validar `/health`:
+Aplicacion local:
 
 ```bash
+curl http://localhost:3000/
 curl http://localhost:3000/health
-```
-
-Validar `/metrics`:
-
-```bash
 curl http://localhost:3000/metrics
 ```
 
-La salida de `/metrics` debe ser texto compatible con Prometheus, con metricas como:
-
-- `process_cpu_user_seconds_total`
-- `process_start_time_seconds`
-- `nodejs_eventloop_lag_seconds`
+El endpoint `/metrics` debe devolver metricas Prometheus, incluyendo metricas de proceso y metricas HTTP personalizadas.
 
 ## Docker
 
-Construir imagen:
+Construir imagen local:
 
 ```bash
 docker build -t actividad1-devops-cicd .
@@ -142,74 +123,68 @@ Ejecutar contenedor:
 docker run -p 3000:3000 actividad1-devops-cicd
 ```
 
-Archivo principal:
+Imagen publicada por Jenkins:
 
-- [Dockerfile](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/Dockerfile)
+```text
+lugomer9/docker_actividad1_devops_cicd
+```
 
-## CI con GitHub Actions
+Tags usados:
 
-El workflow de CI esta en:
+- `latest`
+- `<BUILD_NUMBER>`
+
+## CI
+
+Workflow:
 
 - [.github/workflows/ci.yml](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/.github/workflows/ci.yml)
 
-Actualmente ejecuta:
+Etapas actuales:
 
-- checkout del repositorio
+- checkout
 - instalacion de dependencias
-- ejecucion de tests
-- analisis con SonarQube Cloud
-- escaneo de dependencias con Snyk
+- pruebas
+- SonarQube Cloud
+- Snyk
 
-Secrets requeridos en GitHub:
+Secrets requeridos:
 
 - `SONAR_TOKEN`
 - `SNYK_TOKEN`
 
-## SonarQube Cloud
+## CD con Jenkins
 
-Configuracion del proyecto:
-
-- organizacion: `lgonmerdev`
-- project key: `lgonzalez30_actividad1-devops-cicd`
-
-Archivo de configuracion:
-
-- [sonar-project.properties](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/sonar-project.properties)
-
-## Jenkins para CD
-
-El pipeline de Jenkins esta definido en:
+Pipeline:
 
 - [jenkins/Jenkinsfile](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/jenkins/Jenkinsfile)
 
-Actualmente realiza:
+Etapas actuales:
 
-- checkout del repositorio
+- checkout
 - `npm ci`
 - `npm test`
 - `docker build`
-- `docker push` a Docker Hub
-- `kubectl apply` sobre Kubernetes local
-- verificacion del rollout
+- `docker push`
+- `kubectl apply`
+- `kubectl rollout status`
 
-El pipeline esta pensado para ejecutarse sobre la rama `main`.
+### Jenkins local en Docker
 
-## Jenkins local sobre Docker
-
-La infraestructura para Jenkins local esta en:
+Infraestructura:
 
 - [Jenkins_infraestructura/Dockerfile](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/Jenkins_infraestructura/Dockerfile)
 - [Jenkins_infraestructura/docker-compose.yml](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/Jenkins_infraestructura/docker-compose.yml)
 - [Jenkins_infraestructura/README.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/Jenkins_infraestructura/README.md)
 
-### Levantar Jenkins
+Levantar Jenkins:
 
 ```bash
 cd Jenkins_infraestructura
 docker compose up -d --build
 ```
 
-Si necesitas recrearlo:
+Recrear Jenkins:
 
 ```bash
 docker compose down
@@ -228,43 +203,85 @@ Clave inicial:
 docker exec jenkins-devops-lab cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
-### Plugins recomendados
-
-- Git
-- GitHub
-- Pipeline
-- Docker Pipeline
-- NodeJS
-
-### Configuracion del job Pipeline
-
-Tipo de job:
-
-- `Pipeline`
-
-Configuracion recomendada:
+Configuracion recomendada del job:
 
 - `Definition`: `Pipeline script from SCM`
 - `SCM`: `Git`
 - `Repository URL`: `https://github.com/lgonzalez30/actividad1-devops-cicd.git`
-- `Credentials`: `None`
 - `Branch Specifier`: `*/main`
 - `Script Path`: `jenkins/Jenkinsfile`
+- trigger: `Poll SCM`
+- expresion: `H/5 * * * *`
 
-Trigger recomendado para entorno local:
+## Kubernetes
 
-- `Poll SCM`
-- expresion:
+Manifiestos:
 
-```text
-H/5 * * * *
+- [k8s](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/k8s)
+
+Despliegue manual:
+
+```bash
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/ingress.yaml
 ```
 
-## Entregable documental
+Validacion:
 
-Para el entregable final, revisar tambien:
+```bash
+kubectl get all -n devops-lab
+kubectl port-forward -n devops-lab service/devops-lab-service 3000:80
+```
+
+Nota:
+
+- el pipeline de Jenkins ya realiza este despliegue automaticamente
+- el `Service` principal es `ClusterIP`, por eso para pruebas locales se usa `port-forward`
+
+## Monitoreo
+
+Prometheus y Grafana se despliegan en Kubernetes y consumen el endpoint `/metrics`.
+
+Recursos relevantes:
+
+- [monitoring/prometheus/prometheus.yml](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/monitoring/prometheus/prometheus.yml)
+- [monitoring/grafana/dashboards/app-dashboard.json](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/monitoring/grafana/dashboards/app-dashboard.json)
+
+Port-forward:
+
+```bash
+kubectl port-forward -n devops-lab service/prometheus-service 9090:9090
+kubectl port-forward -n devops-lab service/grafana-service 3001:3000
+```
+
+Accesos:
+
+- Prometheus: `http://localhost:9090`
+- Grafana: `http://localhost:3001`
+
+Credenciales iniciales de Grafana:
+
+- usuario: `admin`
+- password: `admin123`
+
+## Seguridad
+
+SonarQube Cloud:
+
+- organizacion: `lgonmerdev`
+- project key: `lgonzalez30_actividad1-devops-cicd`
+- configuracion: [sonar-project.properties](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/sonar-project.properties)
+
+Snyk:
+
+- integrado en el workflow de GitHub Actions
+- orientado al analisis de dependencias npm
+
+## Documentacion adicional
 
 - [docs/informe-final.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/informe-final.md)
 - [docs/architecture.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/architecture.md)
 - [docs/workflow.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/workflow.md)
-
+- [docs/deployment.md](/Users/luisgonzalez/Documents/development/maestria/taller_devops3/actividad1-devops-cicd/docs/deployment.md)
