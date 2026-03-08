@@ -1,0 +1,26 @@
+{
+  "name": "actividad1-devops-cicd",
+  "version": "1.0.0",
+  "description": "Laboratorio tecnico DevOps academico con Node.js y Express",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "devops",
+    "express",
+    "github-actions",
+    "jenkins",
+    "kubernetes"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

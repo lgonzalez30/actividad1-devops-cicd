@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-lab-app
+  namespace: devops-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-lab-app
+  template:
+    metadata:
+      labels:
+        app: devops-lab-app
+    spec:
+      containers:
+        - name: app
+          image: your-dockerhub-user/devops-lab-app:latest
+          ports:
+            - containerPort: 3000
