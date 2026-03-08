@@ -5,6 +5,8 @@ pipeline {
     APP_NAME = 'actividad1-devops-cicd'
     IMAGE_NAME = 'actividad1-devops-cicd'
     IMAGE_TAG = "${env.BUILD_NUMBER}"
+    DOCKER_BUILDKIT = '0'
+    COMPOSE_DOCKER_CLI_BUILD = '0'
   }
 
   options {
@@ -38,7 +40,8 @@ pipeline {
       }
 
       steps {
-        sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .'
+        sh 'docker version'
+        sh 'docker build --pull -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .'
       }
     }
 
